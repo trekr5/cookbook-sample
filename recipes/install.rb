@@ -134,9 +134,15 @@ Chef::Log.info "dashing service installed"
 # end
 execute 'service dashboard start' do
   cwd '/etc/init.d'
-  not_if { ::File.exists?("/home/sample/dashing.pid")}
+ # not_if { ::File.exists?("/home/sample/dashing.pid")}
  end 
 #=end 
+
+execute 'service dashboard restart' do
+  cwd '/etc/init.d'
+ # not_if { ::File.exists?("/home/sample/dashing.pid")}
+ end 
+
 
 #stop_existing_dashboard(dashboard_name)
 install_dashing_dashboard_components 
