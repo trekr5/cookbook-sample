@@ -1,0 +1,31 @@
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+
+Vagrant.configure(2) do |config|
+  
+  config.vm.box = "hashicorp/precise32"
+  config.vm.network :forwarded_port, guest: 8080, host: 9294
+  config.vm.usable_port_range = (2200..8080)
+ # config.vm.provision "shell", path: "provisioning.sh"
+
+  config.berkshelf.enabled = true
+
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+  end
+
+   config.vm.provision :chef_solo do |chef|
+    chef.log_level               = :info
+        # chef.cookbooks_path = '../cookbooks'
+        #chef.data_bags_path     = 'data_bags'
+        #chef.environment         = 'dev'
+  
+    chef.run_list = [
+     "recipe[sample::install]"
+    ]
+
+    end
+end
