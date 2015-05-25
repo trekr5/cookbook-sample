@@ -124,7 +124,7 @@ script "install_dashboard_as_a_service" do
   sudo update-rc.d dashboard defaults
   EOH
  
-#notifies :start, "service[dashboard]"
+#notifies :start, "execute[service dashboard start]"
   #not_if "test -f /etc/redis/lock"
 end
 Chef::Log.info "dashing service installed"
@@ -132,6 +132,10 @@ Chef::Log.info "dashing service installed"
 # service "dashboard" do 
 #   action :start 
 # end
+execute 'service dashboard start' do
+  cwd '/etc/init.d'
+  not_if { ::File.exists?("/home/sample/dashing.pid")}
+ end 
 #=end 
 
 #stop_existing_dashboard(dashboard_name)
